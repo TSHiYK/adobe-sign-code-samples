@@ -12,7 +12,6 @@ const request = require("request");
 const fs = require("fs");
 
 const options = {
-    method: "POST",
     url: `${process.env.api_access_point}/api/rest/v6/transientDocuments`,
     headers: {
         "Authorization": `Bearer ${process.env.access_token}`,
