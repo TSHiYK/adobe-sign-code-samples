@@ -1,0 +1,15 @@
+{
+  "name": "adobe-sign-sample-codes",
+  "version": "1.0.0",
+  "description": "",
+  "main": "transientDocuments.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Toshiyuki Ichige",
+  "license": "mit",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "request": "^2.88.2"
+  }
+}
