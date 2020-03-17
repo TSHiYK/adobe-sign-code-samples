@@ -1,4 +1,4 @@
-# Adobe Sign Sample Code for Node.js
+# Adobe Sign Code Samples
 
 This repository contains code samples of Adobe Sign API for Node.js.
 
