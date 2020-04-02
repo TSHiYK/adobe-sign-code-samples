@@ -1,8 +1,7 @@
 const agreements = require("./agreements");
 const transientDocuments = require("../transientDocuments/transientDocuments");
-let transientDocumentId;
 
-describe("agreements", () => {
+describe("POST /agreements", () => {
     it("should return agreement ID", async (done) => {
         const transientDocumentId = JSON.parse(await transientDocuments.postTransientDocuments()).transientDocumentId;
         const agreementInfo = {
@@ -30,7 +29,9 @@ describe("agreements", () => {
         expect(result).toHaveProperty("id");
         done();
     });
+});
 
+describe("POST /agreements/{agreementId}/formFields", () => {
     it("should return form field information of an agreement", async (done) => {
         const agreementId = "CBJCHBCAABAAUco-bTvgetP94z7-yGBDUdOM790UvJ98"; // Agreement should be DRAFT state
         const formFieldPostInfo = {
@@ -38,6 +39,32 @@ describe("agreements", () => {
         };
         const result = await agreements.postAgreementsFormFields(agreementId, formFieldPostInfo);
         expect(result).toHaveProperty("fields");
+        done();
+    });
+});
+
+describe("GET /agreements", () => {
+    it("should return agreements", async (done) => {
+        const result = await agreements.getAgreements();
+        expect(JSON.parse(result)).toHaveProperty("userAgreementList");
+        done();
+    });
+});
+
+describe("GET /agreements/{agreementId}", () => {
+    it("should return agreements", async (done) => {
+        const agreementId = "CBJCHBCAABAAUco-bTvgetP94z7-yGBDUdOM790UvJ98";
+        const result = await agreements.getAgreementsInfo(agreementId);
+        expect(JSON.parse(result)).toHaveProperty("name");
+        done();
+    });
+});
+
+describe("GET /agreements/{agreementId}/auditTrail", () => {
+    it("should return agreements", async (done) => {
+        const agreementId = "CBJCHBCAABAAKmMojxerFfPMzKkFQb65aTcJTkjTEQUP";
+        const result = await agreements.getAgreementsAuditTrail(agreementId);
+        expect(JSON.parse(result)).toHaveProperty("name");
         done();
     });
 });
