@@ -4,6 +4,8 @@
  * Uploads a document and obtains the document's ID.
  * ドキュメントファイルをアップロードし、transientDocumentId を取得します。
  * 
+ * @return {Promise<Object>}
+ * 
  * https://secure.na1.echosign.com/public/docs/restapi/v6#!/transientDocuments/createTransientDocument
  */
 
