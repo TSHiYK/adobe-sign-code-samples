@@ -1,5 +1,6 @@
 const agreements = require("./agreements");
 const transientDocuments = require("../transientDocuments/transientDocuments");
+let agreementId;
 
 describe("POST /agreements", () => {
     it("should return agreement ID", async (done) => {
@@ -22,18 +23,22 @@ describe("POST /agreements", () => {
                     "role": "SIGNER"
                 }
             ],
+            "mergeFieldInfo": [
+                { "fieldName": "CompanyName", "defaultValue": "サンプル株式会社" },
+                { "fieldName": "CompanyAddress", "defaultValue": "東京都品川区1-2-3-4567" },
+            ],
             "signatureType": "ESIGN",
-            "state": "DRAFT"
+            "state": "IN_PROCESS"
         };
         const result = await agreements.postAgreements(agreementInfo);
         expect(result).toHaveProperty("id");
+        agreementId = result.id;
         done();
     });
 });
 
 describe("POST /agreements/{agreementId}/formFields", () => {
     it("should return form field information of an agreement", async (done) => {
-        const agreementId = "CBJCHBCAABAAUco-bTvgetP94z7-yGBDUdOM790UvJ98"; // Agreement should be DRAFT state
         const formFieldPostInfo = {
             templateId: "CBJCHBCAABAAPnlNZ1onRpMsO4AVUhD8azW8RCxTxjLa"
         };
@@ -53,7 +58,6 @@ describe("GET /agreements", () => {
 
 describe("GET /agreements/{agreementId}", () => {
     it("should return agreements", async (done) => {
-        const agreementId = "CBJCHBCAABAAUco-bTvgetP94z7-yGBDUdOM790UvJ98";
         const result = await agreements.getAgreementsInfo(agreementId);
         expect(JSON.parse(result)).toHaveProperty("name");
         done();
@@ -62,9 +66,8 @@ describe("GET /agreements/{agreementId}", () => {
 
 describe("GET /agreements/{agreementId}/auditTrail", () => {
     it("should return agreements", async (done) => {
-        const agreementId = "CBJCHBCAABAAKmMojxerFfPMzKkFQb65aTcJTkjTEQUP";
         const result = await agreements.getAgreementsAuditTrail(agreementId);
-        expect(JSON.parse(result)).toHaveProperty("name");
+        expect(typeof result).toBe("string");
         done();
     });
 });
