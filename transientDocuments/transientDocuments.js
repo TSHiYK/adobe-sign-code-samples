@@ -20,7 +20,7 @@ const options = {
         "Content-Type": "multipart/form-data"
     },
     formData: {
-        "File": fs.createReadStream("./sample.pdf")
+        "File": fs.createReadStream("./sample.docx")
     }
 };
 
