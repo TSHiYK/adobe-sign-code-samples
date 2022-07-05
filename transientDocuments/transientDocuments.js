@@ -20,7 +20,7 @@ const options = {
         "Content-Type": "multipart/form-data"
     },
     formData: {
-        "File": fs.createReadStream("./sample.docx")
+        "File": fs.createReadStream("./sample.pdf")
     }
 };
 
@@ -29,6 +29,7 @@ exports.postTransientDocuments = () => {
         request.post(options, (error, response, body) => {
             if (error) {
                 console.log(error);
+                reject(error.body);
             }
 
             resolve(body);
