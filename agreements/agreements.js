@@ -1,5 +1,12 @@
 require('dotenv').config();
 const request = require("request");
+const fs = require("fs");
+
+beforeAll(() => {
+    if (fs.existsSync('downloaded_sample.pdf')) {
+        fs.unlinkSync('downloaded_sample.pdf');
+    }
+});
 
 /**
  * POST /agreements
@@ -152,6 +159,39 @@ exports.getAgreementsAuditTrail = (agreementId) => {
             }
 
             resolve(body);
+        });
+    });
+}
+
+/**
+ * GET /agreements/{agreementId}/combinedDocument 
+ * 
+ * Retrieves a single combined PDF document for the documents associated with an agreement.
+ * 指定した契約書に関連する文書をひとつに結合されたPDF文書を取得します。
+ * 
+ * @param {String} agreementId
+ * @return {Promise<Object>}
+ * 
+ * https://secure.na1.echosign.com/public/docs/restapi/v6#!/agreements/getCombinedDocument
+ */
+exports.getAgreementsCombinedDocument = (agreementId) => {
+    const options = {
+        url: `${process.env.api_access_point}/api/rest/v6/agreements/${agreementId}/combinedDocument`,
+        encoding: "base64",
+        headers: {
+            "Authorization": `Bearer ${process.env.access_token}`,
+        }
+    };
+
+    return new Promise((resolve, reject) => {
+        const fileName = "downloaded_sample.pdf";
+
+        request.get(options, (error, response, body) => {
+            if (error) {
+                console.log(error);
+            }
+            fs.writeFileSync(fileName, body, "base64");
+            resolve();
         });
     });
 }

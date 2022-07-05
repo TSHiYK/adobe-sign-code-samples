@@ -1,5 +1,10 @@
+require('dotenv').config();
+const fs = require("fs");
 const agreements = require("./agreements");
 const transientDocuments = require("../transientDocuments/transientDocuments");
+
+const DRAFT_AGREEMENT_ID = process.env.DRAFT_AGREEMENT_ID;
+const SIGNED_AGREEMENT_ID = process.env.SIGNED_AGREEMENT_ID;
 
 describe("POST /agreements", () => {
     it("should return agreement ID", async () => {
@@ -35,7 +40,7 @@ describe("POST /agreements", () => {
 
 describe("POST /agreements/{agreementId}/formFields", () => {
     it("should return form field information of an agreement", async () => {
-        const agreementId = "CBJCHBCAABAAUco-bTvgetP94z7-yGBDUdOM790UvJ98";
+        const agreementId = DRAFT_AGREEMENT_ID;
         const formFieldPostInfo = {
             templateId: "CBJCHBCAABAAPnlNZ1onRpMsO4AVUhD8azW8RCxTxjLa"
         };
@@ -53,7 +58,7 @@ describe("GET /agreements", () => {
 
 describe("GET /agreements/{agreementId}", () => {
     it("should return agreements", async () => {
-        const agreementId = "CBJCHBCAABAAUco-bTvgetP94z7-yGBDUdOM790UvJ98";
+        const agreementId = DRAFT_AGREEMENT_ID;
         const result = await agreements.getAgreementsInfo(agreementId);
         expect(JSON.parse(result)).toHaveProperty("name");
     });
@@ -61,8 +66,16 @@ describe("GET /agreements/{agreementId}", () => {
 
 describe("GET /agreements/{agreementId}/auditTrail", () => {
     it("should return agreements", async () => {
-        const agreementId = "CBJCHBCAABAAUco-bTvgetP94z7-yGBDUdOM790UvJ98";
+        const agreementId = DRAFT_AGREEMENT_ID;
         const result = await agreements.getAgreementsAuditTrail(agreementId);
         expect(typeof result).toBe("string");
     });
+});
+
+describe("GET /agreements/{agreementId}/combinedDocument", () => {
+    it("should exists the downloaded agreement file", async () => {
+        const agreementId = SIGNED_AGREEMENT_ID;
+        await agreements.getAgreementsCombinedDocument(agreementId);
+        expect(fs.existsSync("downloaded_sample.pdf")).toBe(true);
+    }, 30000);
 });
